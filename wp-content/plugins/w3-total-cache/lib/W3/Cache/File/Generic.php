@@ -42,14 +42,14 @@ class W3_Cache_File_Generic extends W3_Cache_File {
      * @param string $key
      * @param string $var
      * @param int $expire
-	 * @param string $group Used to differentiate between groups of cache values
      * @return boolean
      */
-    function set($key, $var, $expire = 0, $group = '') {
+    function set($key, $var, $expire = 0) {
         $key = $this->get_item_key($key);
         $sub_path = $this->_get_path($key);
         $path = $this->_cache_dir . '/' . $sub_path;
 
+        $sub_dir = dirname($sub_path);
         $dir = dirname($path);
 
         if (!@is_dir($dir)) {
@@ -96,38 +96,31 @@ class W3_Cache_File_Generic extends W3_Cache_File {
      * Returns data
      *
      * @param string $key
-	 * @param string $group Used to differentiate between groups of cache values
-     * @return array
+     * @return string
      */
-    function get_with_old($key, $group = '') {
-        $has_old_data = false;
+    function get($key) {
         $key = $this->get_item_key($key);
+        $var = false;
         $path = $this->_cache_dir . '/' . $this->_get_path($key);
 
         $data = $this->_read($path);
         if ($data != null)
-            return array($data, $has_old_data);
-
+            return $data;
 
         $path_old = $path . '.old';
         $too_old_time = time() - 30;
 
-        if ($exists = file_exists($path_old) ) {
-            $file_time = @filemtime($path_old);
-            if ($file_time) {
-                if ($file_time > $too_old_time) {
-                    // return old data
-                    $has_old_data = true;
-                    return array($this->_read($path_old), $has_old_data);
-
-                }
-
-                @touch($path_old);
+        $file_time = @filemtime($path_old);
+        if ($file_time) {
+            if ($file_time > $too_old_time) {
+                // return old data
+                return $this->_read($path_old);
             }
-        }
-        $has_old_data = $exists;
 
-        return array(null, $has_old_data);
+            @touch($path_old);
+        }
+
+        return null;
     }
 
     /**
@@ -169,10 +162,9 @@ class W3_Cache_File_Generic extends W3_Cache_File {
      * Deletes data
      *
      * @param string $key
-	 * @param string $group Used to differentiate between groups of cache values
      * @return boolean
      */
-    function delete($key, $group = '') {
+    function delete($key) {
         $key = $this->get_item_key($key);
         $path = $this->_cache_dir . DIRECTORY_SEPARATOR . $this->_get_path($key);
 
@@ -190,23 +182,6 @@ class W3_Cache_File_Generic extends W3_Cache_File {
         }
 
         return @unlink($path);
-    }
-
-    /**
-     * Key to delete, deletes .old and primary if exists.
-     * @param $key
-     * @return bool
-     */
-    function hard_delete($key) {
-        $key = $this->get_item_key($key);
-        $path = $this->_cache_dir . DIRECTORY_SEPARATOR . $this->_get_path($key);
-        $old_entry_path = $path . '.old';
-        @unlink($old_entry_path);
-
-        if (!file_exists($path))
-            return true;
-        @unlink($path);
-        return true;
     }
 
     /**
@@ -260,8 +235,8 @@ class W3_Cache_File_Generic extends W3_Cache_File {
             $domain = w3_get_home_url();
             $parsed = parse_url($domain);
             $host = $parsed['host'];
-            $path = isset($parsed['path']) ? '/' . trim($parsed['path'], '/') : '';
-            $flush_dir = W3TC_CACHE_PAGE_ENHANCED_DIR . '/' . $host . $path;
+            $path = trim($parsed['path'], '/');
+            $flush_dir = W3TC_CACHE_PAGE_ENHANCED_DIR . '/' . $host . '/' . $path;
         } else
             $flush_dir = W3TC_CACHE_PAGE_ENHANCED_DIR . '/' . w3_get_domain(w3_get_host());
 

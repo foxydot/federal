@@ -22,7 +22,7 @@ class W3_Pro_Plugin_FragmentCache extends W3_Plugin {
      * Runs plugin
      */
     function run() {
-        add_action('init', array($this, 'on_init'),9999999);
+        add_action('init', array($this, 'on_init'),0);
 
         add_filter('cron_schedules', array(
             &$this,
@@ -46,9 +46,23 @@ class W3_Pro_Plugin_FragmentCache extends W3_Plugin {
             $split = explode(',', $group);
             $group = array_shift($split);
             $actions = $split;
-            $this->register_group($group, $actions, 
-                $this->_config->get_integer('fragmentcache.lifetime'));
+            $this->register_group($group, $actions);
         }
+    }
+
+
+    /**
+     * Activate plugin action (called by W3_PluginProxy)
+     */
+    function activate() {
+        $this->get_admin()->activate();
+    }
+
+    /**
+     * Deactivate plugin action (called by W3_PluginProxy)
+     */
+    function deactivate() {
+        $this->get_admin()->deactivate();
     }
 
     /**
@@ -134,17 +148,12 @@ class W3_Pro_Plugin_FragmentCache extends W3_Plugin {
      *
      * @param $group
      * @param $actions
-     * @param $expiration
      */
-    function register_group($group, $actions, $expiration) {
-        if (empty($group) || empty($actions) || empty($expiration))
+    function register_group($group, $actions) {
+        if (empty($group) || empty($actions))
             return;
 
-        $this->_fragment_groups[$group] = array(
-            'actions' => $actions,
-            'expiration' => $expiration
-        );
-
+        $this->_fragment_groups[$group] = $actions;
         foreach ($actions as $action) {
             if (!isset($this->_actions[$action]))
                 $this->_actions[$action] = array();
@@ -157,16 +166,12 @@ class W3_Pro_Plugin_FragmentCache extends W3_Plugin {
      *
      * @param $group
      * @param $actions
-     * @param $expiration
      */
-    function register_global_group($group, $actions, $expiration) {
-        if (empty($group) || empty($actions) || empty($expiration))
+    function register_global_group($group, $actions) {
+        if (empty($group) || empty($actions))
             return;
 
-        $this->_fragment_groups_global[$group] = array(
-            'actions' => $actions,
-            'expiration' => $expiration
-        );
+        $this->_fragment_groups_global[$group] = $actions;
         foreach ($actions as $action) {
             if (!isset($this->_actions_global[$action]))
                 $this->_actions_global[$action] = array();

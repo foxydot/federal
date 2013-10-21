@@ -4,6 +4,10 @@ if ( !empty( $_POST['save'] ) ) {
 }
 $this->_parent->load();
 $this->admin_scripts();
+if ( ! $this->_parent->_medialibrary->_pre_wp_3_5_compatibility ) {
+	wp_enqueue_media();
+	wp_enqueue_script( 'it-medialibrary-add-image', $this->_parent->_pluginURL . '/lib/medialibrary/medialibrary.js' );
+}
 
 // SUBMIT ADD GROUP
 if ( !empty( $_POST[$this->_var . '-group-save'] ) ) {
@@ -79,8 +83,9 @@ if ( !empty( $_POST['save_order'] ) ) {
 			?>
 				<th><label for="custom_img">Select or upload your own image <?php $this->_parent->tip('Upload your own image from your media library or computer.'); ?></label></th>
 			<?php
-				$imagelink = $this->_parent->_medialibrary->get_link();
-				echo '<td><a href="' . $imagelink . '" class="button button-secondary thickbox">Custom Image</a></td>';
+				$link_args = array( 'title' => __( '+ Add Image', 'it-l10n-videoshowcase' ) );
+				$imagelink = $this->_parent->_medialibrary->get_add_link( $link_args );
+				echo '<td class="actions" >' . $imagelink . '</td>';
 				echo '<input type="hidden" name="attachment_data" id="pb_attachment_data" value="" />';
 				?>
 				<script type="text/javascript">
@@ -169,6 +174,7 @@ if ( !empty( $_POST['save_order'] ) ) {
 						<?php
 						$url = $this->_selfLink . '-settings';
 						$order = $this->_options['groups'][$_GET['group_id']]['order'];
+
 
 
 						foreach ($order as $ordnum) {
@@ -267,8 +273,11 @@ if ( !empty( $_POST['save_order'] ) ) {
 				</tr>
 					<th><label for="custom_img">Select or upload an image <?php $this->_parent->tip('Upload your own image from your media library or computer.'); ?></label></th>
 					<?php
-					$imagelink = $this->_parent->_medialibrary->get_link();
-					echo '<td><a href="' . $imagelink . '" class="button button-secondary thickbox">Select Image</a></td>';
+					$link_args = array( 
+						'title' => __( '+ Add Image', 'it-l10n-videoshowcase' ),
+						);
+					//$imagelink = $this->_parent->_medialibrary->get_add_link( $link_args );
+					echo '<td class="actions" >' . $this->_parent->_medialibrary->get_add_link( $link_args ) . '</td>';
 					echo '<input type="hidden" name="attachment_data" id="pb_attachment_data" value="" />';
 					?>
 					<script type="text/javascript">
@@ -443,3 +452,4 @@ if ( !empty( $_POST['save_order'] ) ) {
 		</form>
 	<?php } ?>
 </div>
+

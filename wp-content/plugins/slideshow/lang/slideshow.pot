@@ -1,22 +1,34 @@
 # Translation of   by .
-# Copyright (C) 2011 
+# Copyright (C) 2012 
 # This file is distributed under the same license as the  package.
-# Chris Jean <support@ithemes.com>, 2011.
+# Chris Jean <support@ithemes.com>, 2012.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/slideshow\n"
-"POT-Creation-Date: 2011-09-22 14:09-0500\n"
-"PO-Revision-Date: 2011-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2012-12-11 01:39-0600\n"
+"PO-Revision-Date: 2012-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Chris Jean <support@ithemes.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: classes/admin.php:79
-msgid "Settings saved..."
+#: classes/admin.php:80
+msgid "Settings saved."
+msgstr ""
+
+#: classes/admin.php:192
+msgid "Add a Slideshow Image"
+msgstr ""
+
+#: classes/admin.php:193
+msgid "Add image"
+msgstr ""
+
+#: classes/view_settings-edit.php:139 lib/medialibrary/init.php:235
+msgid "+ Add Image"
 msgstr ""
 
 #: lib/file-utility/file-utility.php:160 lib/file-utility/file-utility.php:164
@@ -37,91 +49,91 @@ msgstr ""
 msgid "&#8220;%s&#8221; has failed to upload due to an error"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:293
+#: lib/medialibrary/init.php:363
 msgid "Title"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:302
+#: lib/medialibrary/init.php:372
 msgid "Caption"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:319
+#: lib/medialibrary/init.php:389
 msgid "Description"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:330
+#: lib/medialibrary/init.php:400
 msgid "Link URL"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:333
+#: lib/medialibrary/init.php:403
 msgid "Enter a link URL or click above for presets."
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:341
+#: lib/medialibrary/init.php:411
 msgid "File URL"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:345
+#: lib/medialibrary/init.php:415
 msgid "Location of the uploaded file."
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:363
+#: lib/medialibrary/init.php:433
 msgid "Alt text for the image, e.g. &#8220;The Mona Lisa&#8221;"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:368
+#: lib/medialibrary/init.php:438
 msgid "Alternate Text"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:377
+#: lib/medialibrary/init.php:447
 msgid "Alignment"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:465
+#: lib/medialibrary/init.php:535
 #, php-format
 msgid "Sorry, you have filled your storage quota (%s MB)."
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:477
+#: lib/medialibrary/init.php:547
 msgid "Select Files"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:561
+#: lib/medialibrary/init.php:631
 msgid "Choose files to upload"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:563
+#: lib/medialibrary/init.php:633
 msgid "Cancel Upload"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:565 lib/medialibrary/medialibrary.php:578
+#: lib/medialibrary/init.php:635 lib/medialibrary/init.php:648
 #, php-format
 msgid "Maximum upload file size: %d%s"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:567
+#: lib/medialibrary/init.php:637
 msgid "After a file has been uploaded, you can add titles and descriptions."
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:574 lib/medialibrary/medialibrary.php:575
+#: lib/medialibrary/init.php:644 lib/medialibrary/init.php:645
 msgid "Upload"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:575
+#: lib/medialibrary/init.php:645
 msgid "Cancel"
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:580
+#: lib/medialibrary/init.php:650
 msgid ""
 "If you want to use all capabilities of the uploader, like uploading multiple "
 "files at once, please upgrade to lighttpd 1.5."
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:652
+#: lib/medialibrary/init.php:722
 msgid "File type does not meet security guidelines. Try another."
 msgstr ""
 
-#: lib/medialibrary/medialibrary.php:667
+#: lib/medialibrary/init.php:737
 msgid "The uploaded file could not be moved."
 msgstr ""
 

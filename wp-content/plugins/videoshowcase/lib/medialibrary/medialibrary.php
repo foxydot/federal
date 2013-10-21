@@ -1,11 +1,11 @@
 <?php
 /*
- * PluginBuddy.com & iThemes.com
- * Author: Dustin Bolton < http://dustinbolton.com >
- * Created: 9-20-2010
- * Updated: 1-25-2011
- * Version: *See line 16 of this file*
- * 
+ * This class provides a customizable version of WordPress' Media Uploader.
+ * Author: iThemes.com
+ * Created: 2012-09-20
+ * Updated: 2012-06-14
+ * Version: *See the beginning of the class for the version number*
+ *
  * Uses built-in WordPress Media Library system for selecting images.
  * Uses hook to override built-in uploader since it is not as friendly to customizing.
  *
@@ -28,9 +28,11 @@
  *		  <?php echo $this->_parent->_medialibrary->get_anchor() . 'Click me to add an image!</a>'; ?>
  */
 
-if (!class_exists("PluginBuddyMediaLibrary")) {
+
+if ( ! class_exists( 'PluginBuddyMediaLibrary' ) ) {
 	class PluginBuddyMediaLibrary {
-		var $_version = '0.0.6';
+		var $_version = '1.0.7';
+		var $_pre_wp_3_4_compatibility = false;
 		
 		var $_options = array(
 			'js_return_type'				=>		'serialize',						// Format to return data to parent window when insert image/file is selected. Valid options: serialize, json
@@ -81,8 +83,31 @@ if (!class_exists("PluginBuddyMediaLibrary")) {
 			}
 			$this->_parent = &$parent;
 			
+			if ( version_compare( $GLOBALS['wp_version'], '3.3.2', '<=' ) )
+				$this->_pre_wp_3_4_compatibility = true;
+			
+			
 			if ( ( basename( $_SERVER['PHP_SELF'] ) == 'media-upload.php' ) || ( basename( $_SERVER['PHP_SELF'] ) == 'async-upload.php' ) || ( basename( $_SERVER['PHP_SELF'] ) == 'admin-ajax.php' ) ) {
-				if ( ( isset( $_GET['post_id'] ) && ( $_GET['post_id'] == 'pb_medialibrary' ) ) || ( ( isset( $_GET['post_id'] ) && ( $_GET['post_id'] == '0' ) ) ) ) {
+				$in_pb_medialibrary_uploader = false;
+				
+				if ( ! $this->_pre_wp_3_4_compatibility ) {
+					if ( isset( $_GET['context'] ) && ( 'pb_medialibrary' == $_GET['context'] ) ) {
+						$in_pb_medialibrary_uploader = true;
+					}
+					else if ( isset( $_POST['send'] ) && isset( $_POST['attachments'] ) ) {
+						$attachment = reset( $_POST['attachments'] );
+						
+						if ( is_array( $attachment ) && ! empty( $attachment['context'] ) && ( 'pb_medialibrary' == $attachment['context'] ) )
+							$in_pb_medialibrary_uploader = true;
+					}
+				}
+				else {
+					if ( ( isset( $_GET['post_id'] ) && ( $_GET['post_id'] == 'pb_medialibrary' ) ) || ( ( isset( $_GET['post_id'] ) && ( $_GET['post_id'] == '0' ) ) ) )
+						$in_pb_medialibrary_uploader = true;
+				}
+				
+				
+				if ( $in_pb_medialibrary_uploader ) {
 					if ( !empty( $_GET['attachment_id'] ) ) { // Only when editing an image.
 						add_filter( 'media_upload_library', array( &$this, 'filter_media_upload_library' ) );
 						add_filter( 'media_upload_tabs', array( &$this, 'filter_media_upload_tabs_notabs' ) ); // Disable all tabs in editor!
@@ -90,13 +115,17 @@ if (!class_exists("PluginBuddyMediaLibrary")) {
 						add_filter( 'media_upload_tabs', array( &$this, 'filter_media_upload_tabs' ) );
 						
 					}
+					add_action( 'init', array( &$this, 'media_upload_style')  );
 					add_filter( 'gettext', array( &$this, 'filter_gettext' ), 1 );
 					add_filter( 'attachment_fields_to_edit', array( &$this, 'filter_attachment_fields_to_edit' ), 5, 2 );
 					add_action( 'media_upload_pb_uploader', array( &$this, 'action_media_upload_pb_uploader' ) );
-					add_filter( 'media_send_to_editor', array( &$this, 'filter_media_send_to_editor' ), 5, 3 );
-					add_action('wp_ajax_pb_medialibrary_edit', array(&$this, 'ajax_edit_attachment') );
+					add_filter( 'media_send_to_editor', array( &$this, 'filter_media_send_to_editor' ), -10, 3 );
+					add_action( 'wp_ajax_pb_medialibrary_edit', array( &$this, 'ajax_edit_attachment' ) );
 				}
 			}
+		}
+		function media_upload_style() {
+			wp_enqueue_style( 'medialibrarycss' , $this->_parent->_pluginURL . '/css/medialibrary.css');
 		}
 		
 		// For use when editing
@@ -168,12 +197,28 @@ if (!class_exists("PluginBuddyMediaLibrary")) {
 		 *	@return		string		Link URL.
 		 */
 		function get_link( $tab = 'library' ) {
-			return 'media-upload.php?post_id=pb_medialibrary&#038;type=image&#038;tab=' . $tab . '&#038;TB_iframe=1&#038;width=640&#038;height=821';
+			if ( $this->_pre_wp_3_4_compatibility )
+				return 'media-upload.php?post_id=pb_medialibrary&#038;type=image&#038;tab=' . $tab . '&#038;TB_iframe=1&#038;width=640&#038;height=821';
+			
+			
+			$image_library_url = get_upload_iframe_src( 'image', null, $tab );
+			$image_library_url = remove_query_arg( 'TB_iframe', $image_library_url );
+			$image_library_url = add_query_arg( array( 'context' => 'pb_medialibrary', 'TB_iframe' => 1 ), $image_library_url );
+			
+			return $image_library_url;
 		}
 		
 		function get_edit_link( $attachment_id, $tab = 'library' ) {
 			//return admin_url('admin-ajax.php') . '?action=pb_medialibrary_edit&post_id=pb_medialibrary&attachment_id=' . $attachment_id . '&#038;TB_iframe=1&#038;width=640&#038;height=821';
-			return 'media-upload.php?post_id=pb_medialibrary&#038;type=image&#038;tab=' . $tab . '&#038;attachment_id=' . $attachment_id . '&#038;TB_iframe=1&#038;width=640&#038;height=821';
+			if ( $this->_pre_wp_3_4_compatibility )
+				return 'media-upload.php?post_id=pb_medialibrary&#038;type=image&#038;tab=' . $tab . '&#038;attachment_id=' . $attachment_id . '&#038;TB_iframe=1&#038;width=640&#038;height=821';
+			
+			
+			$image_library_url = get_upload_iframe_src( 'image', null, $tab );
+			$image_library_url = remove_query_arg( 'TB_iframe', $image_library_url );
+			$image_library_url = add_query_arg( array( 'context' => 'pb_medialibrary', 'attachment_id' => $attachment_id, 'TB_iframe' => 1 ), $image_library_url );
+			
+			return $image_library_url;
 		}
 		
 		
@@ -279,7 +324,17 @@ if (!class_exists("PluginBuddyMediaLibrary")) {
 			$image_url = wp_get_attachment_url($post->ID);
 			$edit_post = sanitize_post($post, 'edit');
 			
-			$form_fields = array();
+			$form_fields = array(
+				'url' => array(
+					'input' => 'hidden',
+					'value' => '',
+				),
+				'context' => array(
+					'input' => 'hidden',
+					'value' => 'pb_medialibrary',
+				),
+			);
+			
 			if ( $this->_options['show_input-title'] === true ) {
 				$form_fields['post_title'] = array(
 												'label'      => __('Title'),

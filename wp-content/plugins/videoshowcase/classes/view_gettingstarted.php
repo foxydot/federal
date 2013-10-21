@@ -38,6 +38,9 @@ $this->admin_scripts();
 				
 				$i = 0;
 				foreach( $pluginbuddy_series[ $series ] as $name => $path ) {
+					if ( is_array( $path ) ) { // Skip pbframework plugins. Future compat.
+						continue; // Next loop.
+						}
 					$i++;
 					echo '<li><a href="#pluginbuddy-tabs-' . $i . '"><span>' . $name . '</span></a></li>';
 				}
@@ -47,6 +50,9 @@ $this->admin_scripts();
 				<?php
 				$i = 0;
 				foreach( $pluginbuddy_series[ $series ] as $name => $path ) {
+					if ( is_array( $path ) ) { // Skip pbframework plugins. Future compat.
+						continue; // Next loop.
+						}
 					$i++;
 					echo '<div id="pluginbuddy-tabs-' . $i . '">';
 					require( $path . '/classes/view_gettingstarted_content.php' );

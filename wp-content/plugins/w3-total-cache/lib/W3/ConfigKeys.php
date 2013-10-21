@@ -160,10 +160,6 @@ $keys = array(
         'type' => 'integer',
         'default' => 180
     ),
-    'objectcache.purge.all' => array(
-        'type' => 'boolean',
-        'default' => false
-    ),
 
     'fragmentcache.enabled' => array(
         'type' => 'boolean',
@@ -291,10 +287,6 @@ $keys = array(
         'type' => 'boolean',
         'default' => false
     ),
-    'pgcache.remove_charset' => array(
-        'type' => 'boolean',
-        'default' => false
-    ),
     'pgcache.accept.uri' => array(
         'type' => 'array',
         'default' => array(
@@ -309,10 +301,6 @@ $keys = array(
             'wp-links-opml.php',
             'wp-locations.php'
         )
-    ),
-    'pgcache.accept.qs' => array(
-        'type' => 'array',
-        'default' => array()
     ),
     'pgcache.reject.front_page' => array(
         'type' => 'boolean',
@@ -344,10 +332,6 @@ $keys = array(
     'pgcache.reject.cookie' => array(
         'type' => 'array',
         'default' => array('wptouch_switch_toggle')
-    ),
-    'pgcache.reject.request_head' => array(
-        'type' => 'boolean',
-        'default' => false
     ),
     'pgcache.purge.front_page' => array(
         'type' => 'boolean',
@@ -760,7 +744,7 @@ $keys = array(
     ),
     'cdn.engine' => array(
         'type' => 'string',
-        'default' => 'maxcdn'
+        'default' => 'ftp'
     ),
     'cdn.uploads.enable' => array(
         'type' => 'boolean',
@@ -794,15 +778,15 @@ $keys = array(
         'type' => 'array',
         'default' => array(
             'favicon.ico',
-            '{wp_content_dir}/gallery/*',
-            '{wp_content_dir}/uploads/avatars/*',
-            '{plugins_dir}/wordpress-seo/css/xml-sitemap.xsl',
-            '{plugins_dir}/wp-minify/min*',
-            '{plugins_dir}/*.js',
-            '{plugins_dir}/*.css',
-            '{plugins_dir}/*.gif',
-            '{plugins_dir}/*.jpg',
-            '{plugins_dir}/*.png',
+            'wp-content/gallery/*',
+            'wp-content/uploads/avatars/*',
+            'wp-content/plugins/wordpress-seo/css/xml-sitemap.xsl',
+            'wp-content/plugins/wp-minify/min*',
+            'wp-content/plugins/*.js',
+            'wp-content/plugins/*.css',
+            'wp-content/plugins/*.gif',
+            'wp-content/plugins/*.jpg',
+            'wp-content/plugins/*.png',
         )
     ),
     'cdn.import.external' => array(
@@ -993,10 +977,6 @@ $keys = array(
         'type' => 'string',
         'default' => ''
     ),
-    'cdn.netdna.authorization_key' => array(
-        'type' => 'string',
-        'default' => ''
-    ),
     'cdn.netdna.domain' => array(
         'type' => 'array',
         'default' => array()
@@ -1004,26 +984,6 @@ $keys = array(
     'cdn.netdna.ssl' => array(
         'type' => 'string',
         'default' => 'auto'
-    ),
-    'cdn.netdna.zone_id' => array(
-        'type' => 'integer',
-        'default' => 0
-    ),
-    'cdn.maxcdn.authorization_key' => array(
-        'type' => 'string',
-        'default' => ''
-    ),
-    'cdn.maxcdn.domain' => array(
-        'type' => 'array',
-        'default' => array()
-    ),
-    'cdn.maxcdn.ssl' => array(
-        'type' => 'string',
-        'default' => 'auto'
-    ),
-    'cdn.maxcdn.zone_id' => array(
-        'type' => 'integer',
-        'default' => 0
     ),
     'cdn.cotendo.username' => array(
         'type' => 'string',
@@ -1128,9 +1088,9 @@ $keys = array(
     'cdn.reject.files' => array(
         'type' => 'array',
         'default' => array(
-            '{uploads_dir}/wpcf7_captcha/*',
-            '{uploads_dir}/imagerotator.swf',
-            '{plugins_dir}/wp-fb-autoconnect/facebook-platform/channel.html'
+            'wp-content/uploads/wpcf7_captcha/*',
+            'wp-content/uploads/imagerotator.swf',
+            'wp-content/plugins/wp-fb-autoconnect/facebook-platform/channel.html'
         )
     ),
     'cdn.reject.ssl' => array(
@@ -1317,10 +1277,6 @@ $keys = array(
         'type' => 'string',
         'default' => ''
     ),
-    'browsercache.replace.exceptions' => array (
-        'type' => 'array',
-        'default' => array()
-    ),
 
     'mobile.enabled' => array(
         'type' => 'boolean',
@@ -1338,7 +1294,6 @@ $keys = array(
                     'android',
                     'archos5',
                     'bada',
-                    'bb10',
                     'blackberry9500',
                     'blackberry9530',
                     'blackberry9550',
@@ -1364,7 +1319,6 @@ $keys = array(
                     'mot\-mb200',
                     'mot\-mb300',
                     'nexus\ one',
-                    'nexus\ 7',
                     'opera\ mini',
                     's8000',
                     'samsung\-s8000',
@@ -1376,7 +1330,6 @@ $keys = array(
                     't\-mobile\ mytouch\ 3g',
                     't\-mobile\ opal',
                     'tattoo',
-                    'touch',
                     'webmate',
                     'webos'
                 )
@@ -1394,7 +1347,6 @@ $keys = array(
                     'au\-mic',
                     'audiovox',
                     'avantgo',
-                    'bb10',
                     'benq',
                     'bird',
                     'blackberry',
@@ -1416,8 +1368,6 @@ $keys = array(
                     'huawei',
                     'i\-mobile',
                     'iemobile',
-                    'iemobile/7',
-                    'iemobile/9',
                     'j\-phone',
                     'kddi',
                     'konka',
@@ -1434,7 +1384,6 @@ $keys = array(
                     'mobilephone',
                     'mot\-v',
                     'motorola',
-                    'msie\ 10\.0',
                     'netfront',
                     'newgen',
                     'newt',
@@ -1447,7 +1396,6 @@ $keys = array(
                     'openweb',
                     'opera\ mobi',
                     'opera\.mobi',
-                    'p160u',
                     'palm',
                     'panasonic',
                     'pantech',
@@ -1455,7 +1403,6 @@ $keys = array(
                     'pg',
                     'philips',
                     'phone',
-                    'playbook',
                     'playstation\ portable',
                     'portalmmm',
                     '\bppc\b',
@@ -1466,7 +1413,6 @@ $keys = array(
                     'samsung',
                     'sanyo',
                     'sch',
-                    'sch\-i800',
                     'sec',
                     'sendo',
                     'sgh',
@@ -1494,7 +1440,6 @@ $keys = array(
                     'windows\.ce',
                     'winwap',
                     'xda',
-                    'xoom',
                     'zte'
                 )
             )
@@ -1570,6 +1515,10 @@ $keys = array(
         'type' => 'boolean',
         'default' => true
     ),
+    'notes.php_is_old' => array(
+        'type' => 'boolean',
+        'default' => true
+    ),
     'notes.theme_changed' => array(
         'type' => 'boolean',
         'default' => false
@@ -1638,10 +1587,6 @@ $keys = array(
         'type' => 'boolean',
         'default' => true
     ),
-    'notes.cloudflare_plugin' => array(
-        'type' => 'boolean',
-        'default' => true
-    ),
 
     'timelimit.email_send' => array(
         'type' => 'integer',
@@ -1700,10 +1645,6 @@ $keys = array(
         'type' => 'integer',
         'default' => 150
     ),
-    'minify.auto.disable_filename_length_test' => array(
-        'type' => 'boolean',
-        'default' => false,
-    ),
     'common.instance_id' => array(
         'type' => 'integer',
         'default' => 0
@@ -1745,7 +1686,7 @@ $keys = array(
     ),
     'newrelic.use_php_function' => array (
         'type' => 'boolean',
-        'default' => true,
+        'default' => false,
     ),
     'notes.new_relic_page_load_notification' => array(
         'type' => 'boolean',
@@ -1771,57 +1712,6 @@ $keys = array(
         'type' => 'boolean',
         'default' => false,
         'master_only' => 'true'
-    ),
-    'pgcache.late_init' => array (
-        'type' => 'boolean',
-        'default' => false
-    ),
-    'newrelic.include_rum' => array(
-        'type' => 'boolean',
-        'default' => true,
-    ),
-    'extensions.settings' => array(
-        'type' => 'array',
-        'default' => array(
-            'genesis.theme' => array(
-                'wp_head' => '0',
-                'genesis_header' => '1',
-                'genesis_do_nav' => '1',
-                'genesis_do_subnav' => '1',
-                'loop_front_page' => '1',
-                'loop_single' => '1',
-                'loop_single_excluded' => '',
-                'loop_single_genesis_comments' => '0',
-                'loop_single_genesis_pings' => '0',
-                'sidebar' => '0',
-                'sidebar_excluded' => '',
-                'genesis_footer' => '1',
-                'wp_footer' => '0',
-                'fragment_reject_logged_roles' => '1',
-                'fragment_reject_logged_roles_on_actions' => array(
-                    0 => 'genesis_loop',
-                    1 => 'wp_head',
-                    2 => 'wp_footer',
-                ),
-                'fragment_reject_roles' => array(
-                    0 => 'administrator',
-                ),
-            ),
-        )
-    ),
-    'extensions.active' => array(
-        'type' => 'array',
-        'default' => array()
-    ),
-    'plugin.license_key' => array(
-        'type' => 'string',
-        'default' => '',
-        'master_only' => true
-    ),
-    'plugin.type' => array(
-        'type' => 'string',
-        'default' => '',
-        'master_only' => true
     )
 );
 
@@ -1896,11 +1786,6 @@ $keys_admin = array(
         'default' => false,
         'master_only' => 'true'
     )
-    ,'extensions.configuration_sealed' => array(
-        'type' => 'array',
-        'default' => array(),
-        'master_only' => 'true'
-    )
     ,'notes.minify_error' => array(
         'type' => 'boolean',
         'default' => false
@@ -1970,14 +1855,6 @@ $sealing_keys_scope = array(
     array(
         'key' => 'varnish.configuration_sealed',
         'prefix' => 'varnish.'
-    ),
-    array(
-        'key' => 'extensions.active.configuration_sealed',
-        'prefix' => 'extensions.active'
-    ),
-    array(
-        'key' => 'extensions.configuration_sealed',
-        'prefix' => 'extensions.'
     )
 );
 

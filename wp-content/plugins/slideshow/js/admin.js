@@ -23,3 +23,10 @@ jQuery('.radio_toggle').change(function(e) {
 		jQuery('.' + jQuery(this).attr('id') + '_toggle' ).hide();
 	}
 });
+
+jQuery(document).on('click', '.thumbnail', function(event) {
+	jQuery('.attachment-details label').each(function(){
+		if ( 'description' == jQuery(this).attr('data-setting') )
+			jQuery(this).children('span').text('Image Link');
+	});
+});

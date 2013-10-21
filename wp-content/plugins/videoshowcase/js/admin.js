@@ -7,3 +7,10 @@ jQuery(document).ready(function() {
 		fade: 250 
 	});
 });
+
+jQuery(document).on('click', '.thumbnail', function(event) {
+	jQuery('.attachment-details label').each(function(){
+		if ( 'description' == jQuery(this).attr('data-setting') )
+			jQuery(this).children('span').text('Image Link');
+	});
+});
