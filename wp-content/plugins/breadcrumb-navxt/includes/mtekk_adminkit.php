@@ -1,6 +1,6 @@
 <?php
 /*  
-	Copyright 2009-2012  John Havlik  (email : mtekkmonkey@gmail.com)
+	Copyright 2009-2013  John Havlik  (email : mtekkmonkey@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ abstract class mtekk_adminKit
 	protected $opt = array();
 	protected $message;
 	protected $support_url;
+	protected $allowed_html;
 	function __construct()
 	{
 		//Admin Init Hook
@@ -41,8 +42,14 @@ abstract class mtekk_adminKit
 		add_action('activate_' . $this->plugin_basename, array($this, 'install'));
 		//Initilizes l10n domain
 		$this->local();
+		add_action('wp_loaded', array($this, 'wp_loaded'));
 		//Register Help Output
 		//add_action('add_screen_help_and_options', array($this, 'help'));
+	}
+	function wp_loaded()
+	{
+		//Filter our allowed html tags
+		$this->allowed_html = apply_filters($this->unique_prefix . '_allowed_html', wp_kses_allowed_html('post'));
 	}
 	/**
 	 * Returns the internal mtekk_admin_class version
@@ -144,12 +151,12 @@ abstract class mtekk_adminKit
 		//Register options
 		register_setting($this->unique_prefix . '_options', $this->unique_prefix . '_options', '');
 		//Synchronize up our settings with the database as we're done modifying them now
-		$this->opt = $this->parse_args(get_option($this->unique_prefix . '_options'), $this->opt);
+		$this->opt = mtekk_adminKit::parse_args(get_option($this->unique_prefix . '_options'), $this->opt);
 		//Run the opts fix filter
 		$this->opts_fix($this->opt);
 	}
 	/**
-	 * Adds the adminpage the menue and the nice little settings link
+	 * Adds the adminpage the menu and the nice little settings link
 	 * TODO: make this more generic for easier extension
 	 */
 	function add_page()
@@ -366,13 +373,13 @@ abstract class mtekk_adminKit
 					//Handle the HTML options
 					case 'h':
 						//May be better to use wp_kses here
-						$opts[$option] = stripslashes($input[$option]);
+						$opts[$option] = wp_kses(stripslashes($input[$option]), $this->allowed_html);
 						break;
 					//Handle the HTML options that must not be null
 					case 'H':
 						if(isset($input[$option]))
 						{
-							$opts[$option] = stripslashes($input[$option]);
+							$opts[$option] = wp_kses(stripslashes($input[$option]), $this->allowed_html);
 						}
 						break;
 					//Handle the text options that must not be null
@@ -397,7 +404,7 @@ abstract class mtekk_adminKit
 	 * @param mixed $defaults (optional) The default values to validate against
 	 * @return mixed
 	 */
-	function parse_args($args, $defaults = '')
+	static function parse_args($args, $defaults = '')
 	{
 		if(is_object($args))
 		{
@@ -425,7 +432,7 @@ abstract class mtekk_adminKit
 	 * @param array $arg2 second array to merge into $arg1
 	 * @return array
 	 */
-	function array_merge_recursive($arg1, $arg2)
+	static function array_merge_recursive($arg1, $arg2)
 	{
 		foreach($arg2 as $key => $value)
 		{
@@ -460,7 +467,7 @@ abstract class mtekk_adminKit
 		//Do a nonce check, prevent malicious link/form problems
 		check_admin_referer($this->unique_prefix . '_options-options');
 		//Update local options from database
-		$this->opt = $this->parse_args(get_option($this->unique_prefix . '_options'), $this->opt);
+		$this->opt = mtekk_adminKit::parse_args(get_option($this->unique_prefix . '_options'), $this->opt);
 		$this->opts_update_prebk($this->opt);
 		//Update our backup options
 		update_option($this->unique_prefix . '_options_bk', $this->opt);
