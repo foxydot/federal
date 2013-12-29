@@ -56,7 +56,9 @@ if ( !defined('ABSPATH') )
 				foreach( $possible_sizes as $size_key => $size_label ) { ?>
 					<option value="<?php echo $size_key; ?>"<?php selected( $instance['size'], $size_key ); ?>><?php echo $size_label; ?></option>
 					<?php } ?>
-			</select>
+			</select><br />
+			<label for="<?php echo $this->get_field_id('linktext'); ?>"><?php _e('Link Text:', 'image_widget'); ?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id('linktext'); ?>" name="<?php echo $this->get_field_name('linktext'); ?>" type="text" value="<?php echo esc_attr(strip_tags($instance['linktext'])); ?>" /><br />
 		</p>
 	</div>
 	<div id="<?php echo $this->get_field_id('custom_size_fields'); ?>" <?php if ( empty($instance['size']) || $instance['size']!=self::CUSTOM_IMAGE_SIZE_SLUG ) { ?>style="display:none;"<?php } ?>>

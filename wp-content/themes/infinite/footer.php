@@ -38,4 +38,4 @@
 	wp_footer();
 ?>
 </body>
-</html><!-- THIS IS THE PRODUCTION SERVER -->
+</html>
